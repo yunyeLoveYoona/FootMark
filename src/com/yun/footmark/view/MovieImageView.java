@@ -2,12 +2,12 @@ package com.yun.footmark.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.ColorMatrixColorFilter;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
-import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -23,6 +23,7 @@ public class MovieImageView extends ImageView {
 	private int height;
 	private String chineseDialogue;
 	private String englishDialogue;
+	private boolean isChangeColor = false;
 
 	public MovieImageView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -42,29 +43,50 @@ public class MovieImageView extends ImageView {
 
 	@Override
 	protected void onDraw(Canvas canvas) {
-		Drawable localDrawable = getDrawable();
-		localDrawable.draw(canvas);
-		Bitmap bitmap = Bitmap.createBitmap(width, height,
-				Bitmap.Config.ARGB_4444);
+		BitmapDrawable drawable = (BitmapDrawable) getDrawable();
 		Paint mPaint = new Paint();
-		mPaint.setColor(getResources().getColor(R.color.hyaline));
-		mPaint.setFilterBitmap(false);
-		mPaint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.DST_IN));
-		canvas.drawBitmap(
-				BitmapFactory.decodeResource(getResources(), R.drawable.a),
-				0.0f, 0.0f, mPaint);
-
+		if (isChangeColor) {
+			//过滤颜色
+			ColorMatrixColorFilter colorFilter = new ColorMatrixColorFilter(
+					new float[] { 0.33F, 0.59F, 0.11F, 0, 0, 0.33F, 0.59F,
+							0.11F, 0, 0, 0.33F, 0.59F, 0.11F, 0, 0, 0, 0, 0, 1,
+							0, });
+			mPaint.setColorFilter(colorFilter);
+			// LightingColorFilter colorFilter = new
+			// LightingColorFilter(0xFFFFFF00,
+			// 0x00000022);
+			// mPaint.setColorFilter(colorFilter);
+		}
+		canvas.drawBitmap(drawable.getBitmap(), 0.0f, 0.0f, mPaint);
+		//添加上下的黑色背景
+		Paint mPaint2 = new Paint();
+		mPaint2.setFilterBitmap(false);
+		mPaint2.setStyle(Paint.Style.FILL);
+		PorterDuffXfermode mode = new PorterDuffXfermode(PorterDuff.Mode.DST_IN);
+		mPaint2.setXfermode(mode);
+		Bitmap localBitmap = Bitmap.createBitmap(getWidth(), getHeight(),
+				Bitmap.Config.ARGB_8888);
+		Canvas localCanvas = new Canvas(localBitmap);
+		localCanvas.drawRect(0, 60, width, height - 60, new Paint());
+		canvas.drawBitmap(localBitmap, 0, 0, mPaint2);
+		
+		
+		
 		if (chineseDialogue != null) {
 			Paint mPaint1 = new Paint();
 			mPaint1.setTextSize(30);
 			mPaint1.setColor(getResources().getColor(R.color.white));
-			canvas.drawText(chineseDialogue, (width -chineseDialogue.length()*30)/2, height - 90, mPaint1);
+			canvas.drawText(chineseDialogue,
+					(width - chineseDialogue.length() * 30) / 2, height - 120,
+					mPaint1);
 		}
 		if (englishDialogue != null) {
 			Paint mPaint1 = new Paint();
 			mPaint1.setTextSize(20);
 			mPaint1.setColor(getResources().getColor(R.color.white));
-			canvas.drawText(englishDialogue, (width -chineseDialogue.length()*30)/2, height -50, mPaint1);
+			canvas.drawText(englishDialogue,
+					(width - chineseDialogue.length() * 30) / 2, height - 90,
+					mPaint1);
 		}
 	}
 
