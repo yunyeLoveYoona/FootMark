@@ -69,6 +69,7 @@ public class MovieImageView extends ImageView {
 		Canvas localCanvas = new Canvas(localBitmap);
 		localCanvas.drawRect(0, height / 10, width, height - height / 10,
 				new Paint());
+		
 		canvas.drawBitmap(localBitmap, 0, 0, mPaint2);
 
 		if (chineseDialogue != null) {
