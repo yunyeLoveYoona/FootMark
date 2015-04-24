@@ -46,7 +46,7 @@ public class MovieImageView extends ImageView {
 		BitmapDrawable drawable = (BitmapDrawable) getDrawable();
 		Paint mPaint = new Paint();
 		if (isChangeColor) {
-			//过滤颜色
+			// 过滤颜色
 			ColorMatrixColorFilter colorFilter = new ColorMatrixColorFilter(
 					new float[] { 0.33F, 0.59F, 0.11F, 0, 0, 0.33F, 0.59F,
 							0.11F, 0, 0, 0.33F, 0.59F, 0.11F, 0, 0, 0, 0, 0, 1,
@@ -58,7 +58,7 @@ public class MovieImageView extends ImageView {
 			// mPaint.setColorFilter(colorFilter);
 		}
 		canvas.drawBitmap(drawable.getBitmap(), 0.0f, 0.0f, mPaint);
-		//添加上下的黑色背景
+		// 添加上下的黑色背景
 		Paint mPaint2 = new Paint();
 		mPaint2.setFilterBitmap(false);
 		mPaint2.setStyle(Paint.Style.FILL);
@@ -67,17 +67,16 @@ public class MovieImageView extends ImageView {
 		Bitmap localBitmap = Bitmap.createBitmap(getWidth(), getHeight(),
 				Bitmap.Config.ARGB_8888);
 		Canvas localCanvas = new Canvas(localBitmap);
-		localCanvas.drawRect(0, 60, width, height - 60, new Paint());
+		localCanvas.drawRect(0, height / 10, width, height - height / 10,
+				new Paint());
 		canvas.drawBitmap(localBitmap, 0, 0, mPaint2);
-		
-		
-		
+
 		if (chineseDialogue != null) {
 			Paint mPaint1 = new Paint();
 			mPaint1.setTextSize(30);
 			mPaint1.setColor(getResources().getColor(R.color.white));
 			canvas.drawText(chineseDialogue,
-					(width - chineseDialogue.length() * 30) / 2, height - 120,
+					(width - chineseDialogue.length() * 30) / 2, height - height/5,
 					mPaint1);
 		}
 		if (englishDialogue != null) {
@@ -85,7 +84,7 @@ public class MovieImageView extends ImageView {
 			mPaint1.setTextSize(20);
 			mPaint1.setColor(getResources().getColor(R.color.white));
 			canvas.drawText(englishDialogue,
-					(width - chineseDialogue.length() * 30) / 2, height - 90,
+					(width - chineseDialogue.length() * 30) / 2, height - height/8,
 					mPaint1);
 		}
 	}
